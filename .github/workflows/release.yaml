@@ -105,6 +105,8 @@ jobs:
             This is a test release. Yay.
       - name: Upload argocd-linux-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dist/argocd-linux-amd64
@@ -112,6 +114,8 @@ jobs:
           asset_content_type: application/octet-stream
       - name: Upload argocd-darwin-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dist/argocd-darwin-amd64
@@ -119,6 +123,8 @@ jobs:
           asset_content_type: application/octet-stream
       - name: Upload argocd-windows-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dist/argocd-windows-amd64.exe
