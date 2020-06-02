@@ -41,9 +41,9 @@ jobs:
         run: |
           set -u
           . ~/release-vars.sh
-          if ! git branch -l --format="$(refname)" | grep "refs/heads/${TARGET_BRANCH}"; then
+          if ! git branch -l --format='$(refname)' | grep "refs/heads/${TARGET_BRANCH}"; then
             echo "Tag ${RELEASE_TAG} requires release branch '${TARGET_BRANCH}', but it does not exist." >&2
-            git branch -l --format=$(refname)
+            git branch -l --format='$(refname)'
             exit 1
           fi
       - name: Setup Git author information
