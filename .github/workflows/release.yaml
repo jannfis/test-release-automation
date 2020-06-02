@@ -59,6 +59,7 @@ jobs:
           set -u
           . ~/release-vars.sh
           make install-codegen-tools-local
+          helm2 init --client-only
           make manifests-local VERSION=${TARGET_VERSION}
           git diff
           git commit -a -m "Bump version to ${TARGET_VERSION}"
