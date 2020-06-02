@@ -29,11 +29,7 @@ jobs:
           # The release tag is
           RELEASE_TAG="${SOURCE_TAG#*release-}"
 
-          # Store all variables in release-vars.sh, to be sourced from follow-
-          # up steps.
-          echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
-          echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
-          echo "RELEASE_TAG=${RELEASE_TAG}" >> ~/release-vars.sh
+          # Make the variables available in follow-up steps
           echo "::set-env name=TARGET_VERSION::${TARGET_VERSION}"
           echo "::set-env name=TARGET_BRANCH::${TARGET_BRANCH}"
           echo "::set-env name=RELEASE_TAG::${RELEASE_TAG}"
@@ -70,15 +66,11 @@ jobs:
           make manifests-local VERSION=${TARGET_VERSION}
           git diff
           git commit manifests/ -m "Bump version to ${TARGET_VERSION}"
-      - name: Push changes to release branch
-        run: |
-          git push origin ${TARGET_BRANCH}
       - name: Create release tag
         run: |
           set -ue
           echo "Creating release ${RELEASE_TAG}"
-          git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
-          git push origin ${RELEASE_TAG}
+          git tag ${RELEASE_TAG}
       - name: Build Docker image for release
         run: |
           set -ue
@@ -88,3 +80,7 @@ jobs:
           make release-cli
           chmod +x ./dist/argocd-linux-amd64
           ./dist/argocd-linux-amd64 version --client
+      - name: Push changes to release branch
+        run: |
+          git push origin ${TARGET_BRANCH}
+          git push origin ${RELEASE_TAG}
