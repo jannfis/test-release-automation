@@ -17,6 +17,7 @@ jobs:
             echo "Target version '${TARGET_VERSION}' is malformed, refusing to continue."
             exit 1
           fi
+          echo 'FOO=bar' > ~/.bashrc
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -28,8 +29,9 @@ jobs:
           git config --global user.name "jannfis"
       - name: Checkout corresponding release branch
         run: |
+          echo "FOO is ${FOO}"
           TARGET_VERSION=${SOURCE_TAG#*v}
-          TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]}"
+          TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
       - name: Create VERSION information
