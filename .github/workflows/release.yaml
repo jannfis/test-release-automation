@@ -85,5 +85,8 @@ jobs:
           set -ue
           . ~/release-vars.sh
           git clean -fd
+          mkdir -p dist/
           make image IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
           make release-cli
+          chmod +x ./dist/argocd-linux-amd64
+          ./dist/argocd-linux-amd64 --version --client-only
