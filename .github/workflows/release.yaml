@@ -33,6 +33,7 @@ jobs:
           echo "Bumbing version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
+          git push
       - name: Create release tag
         env:
           SOURCE_TAG: ${{ github.ref }}
@@ -41,4 +42,4 @@ jobs:
           RELEASE_TAG=${SOURCE_TAG:18}
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
-          git push ${RELEASE_TAG} HEAD:master
+          git push ${RELEASE_TAG}
