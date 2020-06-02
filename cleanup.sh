@@ -1,9 +1,12 @@
 #!/bin/sh
 
-remote_tags=""
+echo "Delete local tags"
 for tag in $(git tag); do
 	git tag -d $tag
-	remote_tags="${remote_tags} ${tag}"
+done
+echo "Delete remote tags..."
+for tag in $(git ls-remote --tags 2>/dev/null | awk '/refs\/tags/ { print $2; }' | grep -v '{}'); do 
+	git push --delete origin "$tag"; 
 done
 if ! test -z "${remote_tags}"; then 
 	echo "Going to delete remote tags: ${remote_tags}"

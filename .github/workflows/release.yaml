@@ -10,16 +10,25 @@ jobs:
     env:
       SOURCE_TAG: ${{ github.ref }}
     steps:
-      - name: Check if the published tag is well formed
+      - name: Check if the published tag is well formed and setup vars
         run: |
-          TARGET_VERSION=${SOURCE_TAG#*v}
+          # Target version must match major.minor.patch and optional -rcX suffix
+          # where X must be a number.
+          TARGET_VERSION=${SOURCE_TAG#*release-v}
           if ! echo ${TARGET_VERSION} | egrep '^[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)*$'; then
             echo "Target version '${TARGET_VERSION}' is malformed, refusing to continue."
             exit 1
           fi
+
+          # Target branch is the release branch we're going to operate on
+          # Its name is 'release-<major>.<minor>'
           TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
+
+          # The release tag is
           RELEASE_TAG="${SOURCE_TAG#*release-}"
 
+          # Store all variables in release-vars.sh, to be sourced from follow-
+          # up steps.
           echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
           echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
           echo "RELEASE_TAG=${RELEASE_TAG}" >> ~/release-vars.sh
@@ -34,23 +43,21 @@ jobs:
           git config --global user.name "jannfis"
       - name: Checkout corresponding release branch
         run: |
-          #TARGET_VERSION=${SOURCE_TAG#*v}
-          #TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
+          set -u
           . ~/release-vars.sh
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
       - name: Create VERSION information
         run: |
+          set -u
           . ~/release-vars.sh
-          #TARGET_VERSION=${SOURCE_TAG#*v}
           echo "Bumping version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
           git push
       - name: Create release tag
         run: |
-          #!/bin/bash
-          #RELEASE_TAG=${SOURCE_TAG:18}
+          set -u
           . ~/release-vars.sh
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
