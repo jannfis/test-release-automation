@@ -18,7 +18,7 @@ jobs:
             exit 1
           fi
           TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
-          RELEASE_TAG="${SOURCE_TAG:#release-}"
+          RELEASE_TAG="${SOURCE_TAG#release-}"
 
           echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
           echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
