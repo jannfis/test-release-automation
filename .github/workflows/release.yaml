@@ -81,4 +81,4 @@ jobs:
           set -ue
           . ~/release-vars.sh
           git clean -fd
-          make release IMAGE_TAG="${RELEASE_VERSION}" DOCKER_PUSH=false
+          make release IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
