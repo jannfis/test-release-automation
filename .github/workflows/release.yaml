@@ -17,6 +17,14 @@ jobs:
         run: |
           git config --global user.email "jann@mistrust.net"
           git config --global user.name "jannfis"
+      - name: Create VERSION information
+        env:
+          SOURCE_TAG: ${{ github.ref }}
+        run: |
+          TARGET_VERSION=${SOURCE_TAG:#*v}
+          echo ${TARGET_VERSION} > VERSION
+          git commit -m "Bump version to ${VERSION}" VERSION
+          git push
       - name: Create release tag
         env:
           SOURCE_TAG: ${{ github.ref }}
