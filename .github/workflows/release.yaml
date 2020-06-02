@@ -41,6 +41,7 @@ jobs:
         run: |
           set -u
           . ~/release-vars.sh
+          git switch -c temporal-release-branch
           if ! git branch -l --format='%(refname)' | grep "refs/heads/${TARGET_BRANCH}"; then
             echo "Tag ${RELEASE_TAG} requires release branch '${TARGET_BRANCH}', but it does not exist." >&2
             git branch -l --format='%(refname)'
