@@ -16,4 +16,7 @@ jobs:
         env:
           SOURCE_TAG: ${{ github.ref }}
         run: |
-          echo "Creating release tag tag ${SOURCE_TAG}"
+          RELEASE_TAG=${SOURCE_TAG:18}
+          echo "Creating release tag ${RELEASE_TAG}"
+          git tag -a -m "Release ${RELEASE_TAG}"
+          git push --tags
