@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Check if the published tag is well formed and setup vars
         run: |
+          set -ue
           # Target version must match major.minor.patch and optional -rcX suffix
           # where X must be a number.
           TARGET_VERSION=${SOURCE_TAG#*release-v}
@@ -37,36 +38,27 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}
-      - name: Check if release branch exists
-        run: |
-          set -u
-          . ~/release-vars.sh
-          git switch -c temporal-release-branch
-          if ! git branch -l --format='%(refname)' | grep "refs/heads/${TARGET_BRANCH}"; then
-            echo "Tag ${RELEASE_TAG} requires release branch '${TARGET_BRANCH}', but it does not exist." >&2
-            git branch -l --format='%(refname)'
-            exit 1
-          fi
       - name: Setup Git author information
         run: |
+          set -ue
           git config --global user.email "jann@mistrust.net"
           git config --global user.name "jannfis"
       - name: Checkout corresponding release branch
         run: |
-          set -u
+          set -ue
           . ~/release-vars.sh
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
       - name: Create VERSION information
         run: |
-          set -u
+          set -ue
           . ~/release-vars.sh
           echo "Bumping version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
       - name: Generate new set of manifests
         run: |
-          set -u
+          set -ue
           . ~/release-vars.sh
           make install-codegen-tools-local
           helm2 init --client-only
@@ -78,7 +70,7 @@ jobs:
           git push
       - name: Create release tag
         run: |
-          set -u
+          set -ue
           . ~/release-vars.sh
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
