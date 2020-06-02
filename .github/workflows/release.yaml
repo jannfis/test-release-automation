@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOURCE_TAG: ${{ github.ref }}
+      IMAGE_NAMESPACE: jannfis
     steps:
       - name: Check if the published tag is well formed and setup vars
         run: |
@@ -67,7 +68,7 @@ jobs:
           git commit manifests/ -m "Bump version to ${TARGET_VERSION}"
       - name: Push changes to release branch
         run: |
-          git push
+          git push origin ${TARGET_BRANCH}
       - name: Create release tag
         run: |
           set -ue
@@ -75,3 +76,9 @@ jobs:
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
           git push origin ${RELEASE_TAG}
+      - name: Build Docker image for release
+        run: |
+          set -ue
+          . ~/release-vars.sh
+          git clean -fd
+          make release IMAGE_TAG="${RELEASE_VERSION}" DOCKER_PUSH=false
