@@ -93,12 +93,14 @@ jobs:
           git push origin ${RELEASE_TAG}
       - name: Create GitHub release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create_release
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           release_name: ${{ env.RELEASE_TAG }}
           draft: false
-          pre_release: ${{ env.PRE_RELEASE }}
+          prerelease: ${{ env.PRE_RELEASE }}
           body: |
             This is a test release. Yay.
       - name: Upload argocd-linux-amd64 binary to release assets
