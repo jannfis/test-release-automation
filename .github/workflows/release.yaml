@@ -62,7 +62,7 @@ jobs:
           helm2 init --client-only
           make manifests-local VERSION=${TARGET_VERSION}
           git diff
-          git commit -a -m "Bump version to ${TARGET_VERSION}"
+          git commit manifests/ -m "Bump version to ${TARGET_VERSION}"
       - name: Push changes to release branch
         run: |
           git push
