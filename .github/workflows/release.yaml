@@ -29,10 +29,17 @@ jobs:
           # The release tag is
           RELEASE_TAG="${SOURCE_TAG#*release-}"
 
+          # Whether this is a pre-release (indicated by -rc suffix)
+          PRE_RELEASE=false
+          if echo "${RELEASE_TAG}" | egrep -- '-rc[0-9]+$'; then
+            PRE_RELEASE=true
+          fi
+
           # Make the variables available in follow-up steps
           echo "::set-env name=TARGET_VERSION::${TARGET_VERSION}"
           echo "::set-env name=TARGET_BRANCH::${TARGET_BRANCH}"
           echo "::set-env name=RELEASE_TAG::${RELEASE_TAG}"
+          echo "::set-env name=PRE_RELEASE::${PRE_RELEASE}"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
@@ -84,3 +91,34 @@ jobs:
         run: |
           git push origin ${TARGET_BRANCH}
           git push origin ${RELEASE_TAG}
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          release_name: ${{ env.RELEASE_TAG }}
+          draft: false
+          pre_release: ${{ env.PRE_RELEASE }}
+          body: |
+            This is a test release. Yay.
+      - name: Upload argocd-linux-amd64 binary to release assets
+        uses: actions/upload-release-assets@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/argocd-linux-amd64
+          asset_name: argocd-linux-amd64
+          asset_content_type: application/octet-stream
+      - name: Upload argocd-darwin-amd64 binary to release assets
+        uses: actions/upload-release-assets@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/argocd-darwin-amd64
+          asset_name: argocd-darwin-amd64
+          asset_content_type: application/octet-stream
+      - name: Upload argocd-windows-amd64 binary to release assets
+        uses: actions/upload-release-assets@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/argocd-windows-amd64.exe
+          asset_name: argocd-windows-amd64.exe
+          asset_content_type: application/octet-stream
