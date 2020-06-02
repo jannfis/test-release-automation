@@ -22,7 +22,7 @@ jobs:
           SOURCE_TAG: ${{ github.ref }}
         run: |
           TARGET_VERSION=${SOURCE_TAG#*v}
-          SOURCE_BRANCH="release-${TARGET_VERSION%\.[0-9]}
+          SOURCE_BRANCH="release-${TARGET_VERSION%\.[0-9]}"
           echo "Switching to release branch '${SOURCE_BRANCH}'"
       - name: Create VERSION information
         env:
