@@ -394,7 +394,7 @@ pre-commit: dep-ensure codegen build lint test
 
 # Runs pre-commit validation with the local toolchain
 .PHONY: pre-commit-local
-pre-commit-local: dep-ensure-local codegen-local build-local lint-local test-local
+pre-commit-local: mod-download-local codegen-local build-local test-local
 
 .PHONY: release-precheck
 release-precheck: manifests
@@ -403,7 +403,7 @@ release-precheck: manifests
 	@if [ "$(GIT_TAG)" != "v`cat VERSION`" ]; then echo 'VERSION does not match git tag'; exit 1; fi
 
 .PHONY: release
-release: pre-commit release-precheck image release-cli
+release: pre-commit-local release-precheck image release-cli
 
 .PHONY: build-docs
 build-docs:
