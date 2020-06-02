@@ -21,14 +21,14 @@ jobs:
         env:
           SOURCE_TAG: ${{ github.ref }}
         run: |
-          TARGET_VERSION=${SOURCE_TAG:#*v}
+          TARGET_VERSION=${SOURCE_TAG#*v}
           SOURCE_BRANCH="release-${TARGET_VERSION%\.[0-9]}
           echo "Switching to release branch '${SOURCE_BRANCH}'"
       - name: Create VERSION information
         env:
           SOURCE_TAG: ${{ github.ref }}
         run: |
-          TARGET_VERSION=${SOURCE_TAG:#*v}
+          TARGET_VERSION=${SOURCE_TAG#*v}
           echo "Bumbing version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
