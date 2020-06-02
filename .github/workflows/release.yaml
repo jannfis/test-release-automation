@@ -17,7 +17,12 @@ jobs:
             echo "Target version '${TARGET_VERSION}' is malformed, refusing to continue."
             exit 1
           fi
-          echo 'FOO=bar' > ~/.bashrc
+          TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
+          RELEASE_TAG="${SOURCE_TAG:#release-}"
+
+          echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
+          echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
+          echo "RELEASE_TAG=${RELEASE_TAG}" >> ~/release-vars.sh
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -29,14 +34,15 @@ jobs:
           git config --global user.name "jannfis"
       - name: Checkout corresponding release branch
         run: |
-          echo "FOO is ${FOO}"
-          TARGET_VERSION=${SOURCE_TAG#*v}
-          TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
+          #TARGET_VERSION=${SOURCE_TAG#*v}
+          #TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
+          . ~/release-vars.sh
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
       - name: Create VERSION information
         run: |
-          TARGET_VERSION=${SOURCE_TAG#*v}
+          . ~/release-vars.sh
+          #TARGET_VERSION=${SOURCE_TAG#*v}
           echo "Bumping version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
@@ -44,7 +50,8 @@ jobs:
       - name: Create release tag
         run: |
           #!/bin/bash
-          RELEASE_TAG=${SOURCE_TAG:18}
+          #RELEASE_TAG=${SOURCE_TAG:18}
+          . ~/release-vars.sh
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
           git push origin ${RELEASE_TAG}
