@@ -34,6 +34,9 @@ jobs:
           echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
           echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
           echo "RELEASE_TAG=${RELEASE_TAG}" >> ~/release-vars.sh
+          echo "::set-env name=TARGET_VERSION::${TARGET_VERSION}"
+          echo "::set-env name=TARGET_BRANCH::${TARGET_BRANCH}"
+          echo "::set-env name=RELEASE_TAG::${RELEASE_TAG}"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
@@ -51,20 +54,17 @@ jobs:
       - name: Checkout corresponding release branch
         run: |
           set -ue
-          . ~/release-vars.sh
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
       - name: Create VERSION information
         run: |
           set -ue
-          . ~/release-vars.sh
           echo "Bumping version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
       - name: Generate new set of manifests
         run: |
           set -ue
-          . ~/release-vars.sh
           make install-codegen-tools-local
           helm2 init --client-only
           make manifests-local VERSION=${TARGET_VERSION}
@@ -76,17 +76,15 @@ jobs:
       - name: Create release tag
         run: |
           set -ue
-          . ~/release-vars.sh
           echo "Creating release ${RELEASE_TAG}"
           git tag -a -m "Release ${RELEASE_TAG}" ${RELEASE_TAG}
           git push origin ${RELEASE_TAG}
       - name: Build Docker image for release
         run: |
           set -ue
-          . ~/release-vars.sh
           git clean -fd
           mkdir -p dist/
           make image IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
           make release-cli
           chmod +x ./dist/argocd-linux-amd64
-          ./dist/argocd-linux-amd64 --version --client-only
+          ./dist/argocd-linux-amd64 version --client
