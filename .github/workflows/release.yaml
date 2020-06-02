@@ -24,7 +24,6 @@ jobs:
           TARGET_VERSION=${SOURCE_TAG:#*v}
           echo ${TARGET_VERSION} > VERSION
           git commit -m "Bump version to ${VERSION}" VERSION
-          git push
       - name: Create release tag
         env:
           SOURCE_TAG: ${{ github.ref }}
