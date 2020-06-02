@@ -85,5 +85,5 @@ jobs:
           set -ue
           . ~/release-vars.sh
           git clean -fd
-          make install-test-tools-local
-          make release IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
+          make image IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
+          make release-cli
