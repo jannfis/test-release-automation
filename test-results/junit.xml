@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite tests="49" failures="2" time="0.013" name="github.com/argoproj/argo-cd/util/cert">
+		<properties>
+			<property name="go.version" value="go1.14.2"></property>
+			<property name="coverage.statements.pct" value="92.2"></property>
+		</properties>
+		<testcase classname="cert" name="Test_TLSCertificate_ValidPEM_ValidCert" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertificate_ValidPEM_InvalidCert" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertificate_InvalidPEM" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertificate_ValidPEM_ValidCert_Multi" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertificate_ValidPEM_ValidCert_FromFile" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertPool" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_TLSCertificate_CertFromNonExistingFile" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHKnownHostsData_ParseData" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHKnownHostsData_ParseFile" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHKnownHostsData_ParseNonExistingFile" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHKnownHostsData_Tokenize" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_MatchHostName" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHFingerprintSHA256" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_SSHFingerPrintSHA256FromString" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ServerNameWithoutPort" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_foo.example.com" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname__.example.com" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_local_host" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost.local_domain" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname__svc.example.com" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost.." time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost.localdomain" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_github.com." time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_foo_bar.example.com" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost..localdomain" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_.localhost" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_argocd-server.svc.kubernetes.local" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname_localhost." time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidHostnames/Test_validity_for_hostname__svc.example_.com" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_ValidFQDNs" time="0.000"></testcase>
+		<testcase classname="cert" name="Test_EscapeBracketPattern" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetTLSCertificateDataPath" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetTLSCertificateDataPath/Get_default_path" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetTLSCertificateDataPath/Get_custom_path" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetSSHKnownHostsDataPath" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetSSHKnownHostsDataPath/Get_default_path" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetSSHKnownHostsDataPath/Get_custom_path" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertificateForConnect" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertificateForConnect/Success" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertificateForConnect/No_cert_found" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertificateForConnect/No_valid_cert_in_file" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertBundlePathForRepository" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertBundlePathForRepository/Success" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertBundlePathForRepository/No_cert_found" time="0.000"></testcase>
+		<testcase classname="cert" name="TestGetCertBundlePathForRepository/No_valid_cert_in_file" time="0.000"></testcase>
+		<testcase classname="cert" name="TestAlwaysFail" time="0.000">
+			<failure message="Failed" type="">    TestAlwaysFail: cert_test.go:577: </failure>
+		</testcase>
+		<testcase classname="cert" name="TestAlwaysFail/AnotherAlwaysFailTest" time="0.000">
+			<failure message="Failed" type="">    TestAlwaysFail/AnotherAlwaysFailTest: cert_test.go:580: </failure>
+		</testcase>
+	</testsuite>
+</testsuites>

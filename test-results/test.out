@@ -1,0 +1,110 @@
+=== RUN   Test_TLSCertificate_ValidPEM_ValidCert
+--- PASS: Test_TLSCertificate_ValidPEM_ValidCert (0.00s)
+=== RUN   Test_TLSCertificate_ValidPEM_InvalidCert
+--- PASS: Test_TLSCertificate_ValidPEM_InvalidCert (0.00s)
+=== RUN   Test_TLSCertificate_InvalidPEM
+--- PASS: Test_TLSCertificate_InvalidPEM (0.00s)
+=== RUN   Test_TLSCertificate_ValidPEM_ValidCert_Multi
+--- PASS: Test_TLSCertificate_ValidPEM_ValidCert_Multi (0.00s)
+=== RUN   Test_TLSCertificate_ValidPEM_ValidCert_FromFile
+--- PASS: Test_TLSCertificate_ValidPEM_ValidCert_FromFile (0.00s)
+=== RUN   Test_TLSCertPool
+--- PASS: Test_TLSCertPool (0.00s)
+=== RUN   Test_TLSCertificate_CertFromNonExistingFile
+--- PASS: Test_TLSCertificate_CertFromNonExistingFile (0.00s)
+=== RUN   Test_SSHKnownHostsData_ParseData
+--- PASS: Test_SSHKnownHostsData_ParseData (0.00s)
+=== RUN   Test_SSHKnownHostsData_ParseFile
+--- PASS: Test_SSHKnownHostsData_ParseFile (0.00s)
+=== RUN   Test_SSHKnownHostsData_ParseNonExistingFile
+--- PASS: Test_SSHKnownHostsData_ParseNonExistingFile (0.00s)
+=== RUN   Test_SSHKnownHostsData_Tokenize
+--- PASS: Test_SSHKnownHostsData_Tokenize (0.00s)
+=== RUN   Test_MatchHostName
+--- PASS: Test_MatchHostName (0.00s)
+=== RUN   Test_SSHFingerprintSHA256
+--- PASS: Test_SSHFingerprintSHA256 (0.00s)
+=== RUN   Test_SSHFingerPrintSHA256FromString
+--- PASS: Test_SSHFingerPrintSHA256FromString (0.00s)
+=== RUN   Test_ServerNameWithoutPort
+--- PASS: Test_ServerNameWithoutPort (0.00s)
+=== RUN   Test_ValidHostnames
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_foo.example.com
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname__.example.com
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_local_host
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost.local_domain
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname__svc.example.com
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost..
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost.localdomain
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_github.com.
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_foo_bar.example.com
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost..localdomain
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_.localhost
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_argocd-server.svc.kubernetes.local
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname_localhost.
+=== RUN   Test_ValidHostnames/Test_validity_for_hostname__svc.example_.com
+--- PASS: Test_ValidHostnames (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_foo.example.com (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname__.example.com (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_local_host (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost.local_domain (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname__svc.example.com (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost.. (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost.localdomain (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_github.com. (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_foo_bar.example.com (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost..localdomain (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_.localhost (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_argocd-server.svc.kubernetes.local (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname_localhost. (0.00s)
+    --- PASS: Test_ValidHostnames/Test_validity_for_hostname__svc.example_.com (0.00s)
+=== RUN   Test_ValidFQDNs
+--- PASS: Test_ValidFQDNs (0.00s)
+=== RUN   Test_EscapeBracketPattern
+--- PASS: Test_EscapeBracketPattern (0.00s)
+=== RUN   TestGetTLSCertificateDataPath
+=== RUN   TestGetTLSCertificateDataPath/Get_default_path
+=== RUN   TestGetTLSCertificateDataPath/Get_custom_path
+--- PASS: TestGetTLSCertificateDataPath (0.00s)
+    --- PASS: TestGetTLSCertificateDataPath/Get_default_path (0.00s)
+    --- PASS: TestGetTLSCertificateDataPath/Get_custom_path (0.00s)
+=== RUN   TestGetSSHKnownHostsDataPath
+=== RUN   TestGetSSHKnownHostsDataPath/Get_default_path
+=== RUN   TestGetSSHKnownHostsDataPath/Get_custom_path
+--- PASS: TestGetSSHKnownHostsDataPath (0.00s)
+    --- PASS: TestGetSSHKnownHostsDataPath/Get_default_path (0.00s)
+    --- PASS: TestGetSSHKnownHostsDataPath/Get_custom_path (0.00s)
+=== RUN   TestGetCertificateForConnect
+=== RUN   TestGetCertificateForConnect/Success
+=== RUN   TestGetCertificateForConnect/No_cert_found
+=== RUN   TestGetCertificateForConnect/No_valid_cert_in_file
+--- PASS: TestGetCertificateForConnect (0.00s)
+    --- PASS: TestGetCertificateForConnect/Success (0.00s)
+    --- PASS: TestGetCertificateForConnect/No_cert_found (0.00s)
+    --- PASS: TestGetCertificateForConnect/No_valid_cert_in_file (0.00s)
+=== RUN   TestGetCertBundlePathForRepository
+=== RUN   TestGetCertBundlePathForRepository/Success
+=== RUN   TestGetCertBundlePathForRepository/No_cert_found
+=== RUN   TestGetCertBundlePathForRepository/No_valid_cert_in_file
+--- PASS: TestGetCertBundlePathForRepository (0.00s)
+    --- PASS: TestGetCertBundlePathForRepository/Success (0.00s)
+    --- PASS: TestGetCertBundlePathForRepository/No_cert_found (0.00s)
+    --- PASS: TestGetCertBundlePathForRepository/No_valid_cert_in_file (0.00s)
+=== RUN   TestAlwaysFail
+    TestAlwaysFail: cert_test.go:577: 
+        	Error Trace:	cert_test.go:577
+        	Error:      	Should be true
+        	Test:       	TestAlwaysFail
+=== RUN   TestAlwaysFail/AnotherAlwaysFailTest
+    TestAlwaysFail/AnotherAlwaysFailTest: cert_test.go:580: 
+        	Error Trace:	cert_test.go:580
+        	Error:      	Should be false
+        	Test:       	TestAlwaysFail/AnotherAlwaysFailTest
+--- FAIL: TestAlwaysFail (0.00s)
+    --- FAIL: TestAlwaysFail/AnotherAlwaysFailTest (0.00s)
+FAIL
+coverage: 92.2% of statements
+FAIL	github.com/argoproj/argo-cd/util/cert	0.013s
+FAIL
