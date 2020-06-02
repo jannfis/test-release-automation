@@ -34,6 +34,10 @@ jobs:
           echo "TARGET_VERSION=${TARGET_VERSION}" > ~/release-vars.sh
           echo "TARGET_BRANCH=${TARGET_BRANCH}" >> ~/release-vars.sh
           echo "RELEASE_TAG=${RELEASE_TAG}" >> ~/release-vars.sh
+      - name: Setup Golang
+        uses: actions/setup-go@v1
+        with:
+          go-version: '1.14.2'
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -81,4 +85,5 @@ jobs:
           set -ue
           . ~/release-vars.sh
           git clean -fd
+          make install-test-tools-local
           make release IMAGE_TAG="${TARGET_VERSION}" DOCKER_PUSH=false
