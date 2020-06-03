@@ -159,4 +159,4 @@ jobs:
       - name: Delete original request tag from repository
         run: |
           git push --delete origin ${SOURCE_TAG}
-        if: ${{ always }}
+        if: ${{ always() }}
