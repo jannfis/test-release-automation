@@ -133,6 +133,9 @@ jobs:
         run: |
           git push origin ${TARGET_BRANCH}
           git push origin ${RELEASE_TAG}
+      - name: Show release notes
+        run:
+          echo "${RELEASE_NOTES}"
       - name: Create GitHub release
         uses: actions/create-release@v1
         env:
