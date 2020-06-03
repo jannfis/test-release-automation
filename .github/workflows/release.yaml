@@ -77,7 +77,7 @@ jobs:
           echo "=============END RELEASE NOTES=================="
           RELEASE_NOTES_TEXT=$(cat $RELEASE_NOTES)
           echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES_TEXT}"
-          echi "::set-env name=DRY_RUN::true"
+          echo "::set-env name=DRY_RUN::true"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
