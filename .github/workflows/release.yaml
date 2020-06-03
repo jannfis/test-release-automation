@@ -77,6 +77,7 @@ jobs:
           echo "=============END RELEASE NOTES=================="
           RELEASE_NOTES_TEXT=$(cat $RELEASE_NOTES)
           echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES_TEXT}"
+          echi "::set-env name=DRY_RUN::true"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
@@ -119,6 +120,7 @@ jobs:
           make release-cli
           chmod +x ./dist/argocd-linux-amd64
           ./dist/argocd-linux-amd64 version --client
+        if: ${{ env.DRY_RUN }} != 'true'
       - name: Push docker image to repository
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -126,6 +128,7 @@ jobs:
         run: |
           docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_TOKEN}"
           docker push ${IMAGE_NAMESPACE}/argocd:v${TARGET_VERSION}
+        if: ${{ env.DRY_RUN }} != 'true'
       - name: Push changes to release branch
         run: |
           git push origin ${TARGET_BRANCH}
@@ -140,7 +143,8 @@ jobs:
           release_name: ${{ env.RELEASE_TAG }}
           draft: false
           prerelease: ${{ env.PRE_RELEASE }}
-          body: ${{ env.RELEASE_NOTES }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
       - name: Upload argocd-linux-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -150,6 +154,7 @@ jobs:
           asset_path: ./dist/argocd-linux-amd64
           asset_name: argocd-linux-amd64
           asset_content_type: application/octet-stream
+        if: ${{ env.DRY_RUN }} != 'true'
       - name: Upload argocd-darwin-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -159,6 +164,7 @@ jobs:
           asset_path: ./dist/argocd-darwin-amd64
           asset_name: argocd-darwin-amd64
           asset_content_type: application/octet-stream
+        if: ${{ env.DRY_RUN }} != 'true'
       - name: Upload argocd-windows-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -168,6 +174,7 @@ jobs:
           asset_path: ./dist/argocd-windows-amd64.exe
           asset_name: argocd-windows-amd64.exe
           asset_content_type: application/octet-stream
+        if: ${{ env.DRY_RUN }} != 'true'
       - name: Delete original request tag from repository
         run: |
           git push --delete origin ${SOURCE_TAG}
