@@ -24,7 +24,7 @@ jobs:
           # where X must be a number.
           TARGET_VERSION=${SOURCE_TAG#*release-v}
           if ! echo ${TARGET_VERSION} | egrep '^[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)*$'; then
-            echo "Target version '${TARGET_VERSION}' is malformed, refusing to continue." >&2
+            echo "::error::Target version '${TARGET_VERSION}' is malformed, refusing to continue." >&2
             exit 1
           fi
 
@@ -39,6 +39,11 @@ jobs:
           PRE_RELEASE=false
           if echo "${RELEASE_TAG}" | egrep -- '-rc[0-9]+$'; then
             PRE_RELEASE=true
+          fi
+          
+          if git rev-parse ${RELEASE_TAG}; then
+            echo "::error::Release tag ${RELEASE_TAG} already exists in repository. Refusing to continue."
+            exit 1
           fi
 
           # Make the variables available in follow-up steps
