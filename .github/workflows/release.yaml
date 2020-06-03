@@ -128,7 +128,7 @@ jobs:
         run: |
           docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_TOKEN}"
           docker push ${IMAGE_NAMESPACE}/argocd:v${TARGET_VERSION}
-        if: ${{ env.DRY_RUN != true }}
+        if: ${{ env.DRY_RUN != 'true' }}
       - name: Push changes to release branch
         run: |
           git push origin ${TARGET_BRANCH}
