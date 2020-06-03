@@ -47,7 +47,7 @@ jobs:
           echo "::set-env name=PRE_RELEASE::${PRE_RELEASE}"
       - name: Check if our release tag has a correct annotation
         run: |
-          set -xue
+          set -ue
           RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
           # Quite dirty hack to get the release notes from the annotated tag
           # into a temporary file.
