@@ -9,14 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOURCE_TAG: ${{ github.ref }}
+      # The image namespace where Docker image will be published to
       IMAGE_NAMESPACE: jannfis
+      # Whether to create & push image and release assets
       DRY_RUN: false
+      # Whether a draft release should be created, instead of public one
+      DRAFT_RELEASE: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}
+
       - name: Check if the published tag is well formed and setup vars
         run: |
           set -ue
@@ -51,6 +56,7 @@ jobs:
           echo "::set-env name=TARGET_BRANCH::${TARGET_BRANCH}"
           echo "::set-env name=RELEASE_TAG::${RELEASE_TAG}"
           echo "::set-env name=PRE_RELEASE::${PRE_RELEASE}"
+
       - name: Check if our release tag has a correct annotation
         run: |
           set -ue
@@ -87,6 +93,12 @@ jobs:
           echo "============BEGIN RELEASE NOTES================="
           cat ${RELEASE_NOTES}
           echo "=============END RELEASE NOTES=================="
+
+          relNoteLen=$(stat -c '%s' $RELEASE_NOTES)
+          if test $relNoteLen -lt 100; then
+            echo "::error::No release notes provided in tag annotation (or tag is not annotated)"
+            exit 1
+          fi
 
           # We store path to temporary release notes file for later reading, we
           # need it when creating release.
