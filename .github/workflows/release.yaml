@@ -52,7 +52,11 @@ jobs:
           # Quite dirty hack to get the release notes from the annotated tag
           # into a temporary file.
           prefix=true
+          begin=false
           git show ${SOURCE_TAG} | while read line; do
+            if test "$begin" = "false"; then
+              if echo $line | grep -q "tag ${SOURCE_TAG#refs/tags/}"; then begin="true"; fi
+            fi
             if test "$prefix" = "true"; then
                   if test -z "$line"; then prefix=false; fi
             else
@@ -62,7 +66,9 @@ jobs:
                   echo $line >> ${RELEASE_NOTES}
             fi
           done
+          echo "============BEGIN RELEASE NOTES================="
           cat ${RELEASE_NOTES}
+          echo "=============END RELEASE NOTES=================="
           echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES}"
       - name: Setup Golang
         uses: actions/setup-go@v1
