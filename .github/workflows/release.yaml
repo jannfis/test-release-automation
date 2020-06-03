@@ -48,7 +48,7 @@ jobs:
       - name: Check if our release tag has a correct annotation
         run: |
           set -xue
-          RELEASE_NOTES=$(mktemp -p /tmp release-notes)
+          RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
           # Quite dirty hack to get the release notes from the annotated tag
           # into a temporary file.
           prefix=true
