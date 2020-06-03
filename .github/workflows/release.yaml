@@ -114,7 +114,7 @@ jobs:
           make manifests-local VERSION=${TARGET_VERSION}
           git diff
           git commit manifests/ -m "Bump version to ${TARGET_VERSION}"
-      - name: Create release tag
+      - name: Create the release tag
         run: |
           set -ue
           echo "Creating release ${RELEASE_TAG}"
@@ -145,6 +145,7 @@ jobs:
       - name: Push changes to release branch
         run: |
           git push origin ${TARGET_BRANCH}
+          git push origin ${RELEASE_TAG}
       - name: Create GitHub release
         uses: actions/create-release@v1
         env:
