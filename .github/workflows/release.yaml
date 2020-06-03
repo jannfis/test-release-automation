@@ -49,7 +49,19 @@ jobs:
         run: |
           set -xue
           RELEASE_NOTES=$(mktemp -p /tmp release-notes)
-          git show ${SOURCE_TAG} > ${RELEASE_NOTES}
+          # Quite dirty hack to get the release notes from the annotated tag
+          # into a temporary file.
+          prefix=true
+          git show ${SOURCE_TAG} | while read line; do
+            if test "$prefix" = "true"; then
+                  if test -z "$line"; then prefix=false; fi
+            else
+                  if echo $line | egrep -q '^commit [0-9a-f]+'; then
+                          break
+                  fi
+                  echo $line >> ${RELEASE_NOTES}
+            fi
+          done
           cat ${RELEASE_NOTES}
           echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES}"
       - name: Setup Golang
