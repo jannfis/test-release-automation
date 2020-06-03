@@ -75,7 +75,8 @@ jobs:
           echo "============BEGIN RELEASE NOTES================="
           cat ${RELEASE_NOTES}
           echo "=============END RELEASE NOTES=================="
-          echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES}"
+          RELEASE_NOTES_TEXT=$(cat $RELEASE_NOTES)
+          echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES_TEXT}"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
@@ -139,8 +140,7 @@ jobs:
           release_name: ${{ env.RELEASE_TAG }}
           draft: false
           prerelease: ${{ env.PRE_RELEASE }}
-          body: |
-            This is a test release. Yay.
+          body: ${{ env.RELEASE_NOTES }}
       - name: Upload argocd-linux-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
