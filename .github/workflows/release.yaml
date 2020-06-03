@@ -11,6 +11,11 @@ jobs:
       SOURCE_TAG: ${{ github.ref }}
       IMAGE_NAMESPACE: jannfis
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Check if the published tag is well formed and setup vars
         run: |
           set -ue
@@ -40,15 +45,17 @@ jobs:
           echo "::set-env name=TARGET_BRANCH::${TARGET_BRANCH}"
           echo "::set-env name=RELEASE_TAG::${RELEASE_TAG}"
           echo "::set-env name=PRE_RELEASE::${PRE_RELEASE}"
+      - name: Check if our release tag has a correct annotation
+        run: |
+          set -xue
+          RELEASE_NOTES=$(mktemp -p /tmp release-notes)
+          git show ${SOURCE_TAG} > ${RELEASE_NOTES}
+          cat ${RELEASE_NOTES}
+          echo "::set-env name=RELEASE_NOTES::${RELEASE_NOTES}"
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
           go-version: '1.14.2'
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Setup Git author information
         run: |
           set -ue
