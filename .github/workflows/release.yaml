@@ -48,15 +48,16 @@ jobs:
       - name: Check if our release tag has a correct annotation
         run: |
           set -ue
+          git fetch --tags
           RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
           # Quite dirty hack to get the release notes from the annotated tag
           # into a temporary file.
           echo "=========== BEGIN COMMIT MESSAGE ============="
-          git show origin ${SOURCE_TAG}
+          git show ${SOURCE_TAG}
           echo "============ END COMMIT MESSAGE =============="
           prefix=true
           begin=false
-          git show origin ${SOURCE_TAG} | while read line; do
+          git show ${SOURCE_TAG} | while read line; do
             if test "$begin" = "false"; then
               if echo $line | grep -q "tag ${SOURCE_TAG#refs/tags/}"; then begin="true"; fi
             fi
