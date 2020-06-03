@@ -12,9 +12,11 @@ jobs:
       # The image namespace where Docker image will be published to
       IMAGE_NAMESPACE: jannfis
       # Whether to create & push image and release assets
-      DRY_RUN: false
+      DRY_RUN: true
       # Whether a draft release should be created, instead of public one
       DRAFT_RELEASE: false
+      # The name of the repository containing tap formulae
+      TAP_REPOSITORY: jannfis/homebrew-tap
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -104,26 +106,31 @@ jobs:
           # We store path to temporary release notes file for later reading, we
           # need it when creating release.
           echo "::set-env name=RELEASE_NOTES::$RELEASE_NOTES"
+
       - name: Setup Golang
         uses: actions/setup-go@v1
         with:
           go-version: '1.14.2'
+
       - name: Setup Git author information
         run: |
           set -ue
           git config --global user.email "jann@mistrust.net"
           git config --global user.name "jannfis"
+
       - name: Checkout corresponding release branch
         run: |
           set -ue
           echo "Switching to release branch '${TARGET_BRANCH}'"
           git checkout ${TARGET_BRANCH}
+
       - name: Create VERSION information
         run: |
           set -ue
           echo "Bumping version from $(cat VERSION) to ${TARGET_VERSION}"
           echo "${TARGET_VERSION}" > VERSION
           git commit -m "Bump version to ${TARGET_VERSION}" VERSION
+
       - name: Generate new set of manifests
         run: |
           set -ue
@@ -132,11 +139,13 @@ jobs:
           make manifests-local VERSION=${TARGET_VERSION}
           git diff
           git commit manifests/ -m "Bump version to ${TARGET_VERSION}"
+
       - name: Create the release tag
         run: |
           set -ue
           echo "Creating release ${RELEASE_TAG}"
           git tag ${RELEASE_TAG}
+
       - name: Build Docker image for release
         run: |
           set -ue
@@ -147,6 +156,7 @@ jobs:
           chmod +x ./dist/argocd-linux-amd64
           ./dist/argocd-linux-amd64 version --client
         if: ${{ env.DRY_RUN != 'true' }}
+
       - name: Push docker image to repository
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -155,15 +165,18 @@ jobs:
           docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_TOKEN}"
           docker push ${IMAGE_NAMESPACE}/argocd:v${TARGET_VERSION}
         if: ${{ env.DRY_RUN != 'true' }}
+
       - name: Read release notes file
         id: release-notes
         uses: juliangruber/read-file-action@v1
         with: 
           path: ${{ env.RELEASE_NOTES }}
+
       - name: Push changes to release branch
         run: |
           git push origin ${TARGET_BRANCH}
           git push origin ${RELEASE_TAG}
+
       - name: Create GitHub release
         uses: actions/create-release@v1
         env:
@@ -175,6 +188,7 @@ jobs:
           draft: false
           prerelease: ${{ env.PRE_RELEASE }}
           body: ${{ steps.release-notes.outputs.content }}
+
       - name: Upload argocd-linux-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -185,6 +199,7 @@ jobs:
           asset_name: argocd-linux-amd64
           asset_content_type: application/octet-stream
         if: ${{ env.DRY_RUN != 'true' }}
+
       - name: Upload argocd-darwin-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -195,6 +210,7 @@ jobs:
           asset_name: argocd-darwin-amd64
           asset_content_type: application/octet-stream
         if: ${{ env.DRY_RUN != 'true' }}
+
       - name: Upload argocd-windows-amd64 binary to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -205,6 +221,24 @@ jobs:
           asset_name: argocd-windows-amd64.exe
           asset_content_type: application/octet-stream
         if: ${{ env.DRY_RUN != 'true' }}
+
+      - name: Check out homebrew tap repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.TAP_REPOSITORY }}
+          path: homebrew-tap
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+          
+      - name: Update homebrew tap formulae
+        run: |
+          cd homebrew-tap
+          ./update.sh argocd ${TARGET_VERSION}
+          git commit -am "Update argocd to ${TARGET_VERSION}"
+          git push
+          cd ..
+          rm -rf homebrew-tap
+
       - name: Delete original request tag from repository
         run: |
           git push --delete origin ${SOURCE_TAG}
