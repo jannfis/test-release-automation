@@ -10,6 +10,7 @@ jobs:
     env:
       SOURCE_TAG: ${{ github.ref }}
       IMAGE_NAMESPACE: jannfis
+      DRY_RUN: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,15 +52,19 @@ jobs:
           # Fetch all tag information as well
           git fetch --prune --tags --force
 
-          RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
-          # Quite dirty hack to get the release notes from the annotated tag
-          # into a temporary file.
           echo "=========== BEGIN COMMIT MESSAGE ============="
           git show ${SOURCE_TAG}
           echo "============ END COMMIT MESSAGE =============="
+          
+          # Quite dirty hack to get the release notes from the annotated tag
+          # into a temporary file.
+          RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
+
           prefix=true
           begin=false
           git show ${SOURCE_TAG} | while read line; do
+            # Whatever is in commit history for the tag, we only want that
+            # annotation from our tag. We discard everything else.
             if test "$begin" = "false"; then
               if echo $line | grep -q "tag ${SOURCE_TAG#refs/tags/}"; then begin="true"; fi
             fi
@@ -72,10 +77,14 @@ jobs:
                   echo $line >> ${RELEASE_NOTES}
             fi
           done
+
+          # For debug purposes
           echo "============BEGIN RELEASE NOTES================="
           cat ${RELEASE_NOTES}
           echo "=============END RELEASE NOTES=================="
-          echo "::set-env name=DRY_RUN::true"
+
+          # We store path to temporary release notes file for later reading, we
+          # need it when creating release.
           echo "::set-env name=RELEASE_NOTES::$RELEASE_NOTES"
       - name: Setup Golang
         uses: actions/setup-go@v1
