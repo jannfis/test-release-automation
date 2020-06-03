@@ -13,7 +13,7 @@ jobs:
       # The image namespace where Docker image will be published to
       IMAGE_NAMESPACE: jannfis
       # Whether to create & push image and release assets
-      DRY_RUN: true
+      DRY_RUN: false
       # Whether a draft release should be created, instead of public one
       DRAFT_RELEASE: false
       # The name of the repository containing tap formulae
