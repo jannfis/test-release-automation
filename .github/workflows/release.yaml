@@ -78,6 +78,7 @@ jobs:
             # annotation from our tag. We discard everything else.
             if test "$begin" = "false"; then
               if echo $line | grep -q "tag ${SOURCE_TAG#refs/tags/}"; then begin="true"; fi
+              continue
             fi
             if test "$prefix" = "true"; then
                   if test -z "$line"; then prefix=false; fi
