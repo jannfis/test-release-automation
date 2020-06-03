@@ -10,7 +10,7 @@ jobs:
     env:
       SOURCE_TAG: ${{ github.ref }}
       IMAGE_NAMESPACE: jannfis
-      DRY_RUN: true
+      DRY_RUN: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
