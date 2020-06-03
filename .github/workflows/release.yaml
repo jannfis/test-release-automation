@@ -49,7 +49,7 @@ jobs:
         run: |
           set -ue
           # Fetch all tag information as well
-          git fetch --prune --tags
+          git fetch --prune --tags --force
 
           RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
           # Quite dirty hack to get the release notes from the annotated tag
