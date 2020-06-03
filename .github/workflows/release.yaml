@@ -51,6 +51,9 @@ jobs:
           RELEASE_NOTES=$(mktemp -p /tmp release-notes.XXXXXX)
           # Quite dirty hack to get the release notes from the annotated tag
           # into a temporary file.
+          echo "=========== BEGIN COMMIT MESSAGE ============="
+          git show ${SOURCE_TAG}
+          echo "============ END COMMIT MESSAGE =============="
           prefix=true
           begin=false
           git show ${SOURCE_TAG} | while read line; do
