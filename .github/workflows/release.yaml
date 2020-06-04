@@ -42,7 +42,7 @@ jobs:
           # Its name is 'release-<major>.<minor>'
           TARGET_BRANCH="release-${TARGET_VERSION%\.[0-9]*}"
 
-          # The release tag is
+          # The release tag is the source tag, minus the release- prefix
           RELEASE_TAG="${SOURCE_TAG#*release-}"
 
           # Whether this is a pre-release (indicated by -rc suffix)
@@ -50,7 +50,15 @@ jobs:
           if echo "${RELEASE_TAG}" | egrep -- '-rc[0-9]+$'; then
             PRE_RELEASE=true
           fi
-          
+
+          # We must not have a release trigger within the same release branch,
+          # because that means a release for this branch is already running.
+          if git tag -l | grep -q "release-v${TARGET_VERSION}%\.[0-9]*}"; then
+            echo "::error::Another release for branch ${TARGET_BRANCH} is currently in progress."
+            exit 1
+          fi
+
+          # Ensure that release do not yet exist
           if git rev-parse ${RELEASE_TAG}; then
             echo "::error::Release tag ${RELEASE_TAG} already exists in repository. Refusing to continue."
             exit 1
