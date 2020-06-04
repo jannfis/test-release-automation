@@ -53,7 +53,7 @@ jobs:
 
           # We must not have a release trigger within the same release branch,
           # because that means a release for this branch is already running.
-          if git tag -l | grep -q "release-v${TARGET_VERSION%\.[0-9]*}"; then
+          if git tag -l | grep "release-v${TARGET_VERSION%\.[0-9]*}"; then
             echo "::error::Another release for branch ${TARGET_BRANCH} is currently in progress."
             exit 1
           fi
