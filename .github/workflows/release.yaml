@@ -18,12 +18,14 @@ jobs:
       DRAFT_RELEASE: false
       # The name of the repository containing tap formulae
       TAP_REPOSITORY: jannfis/homebrew-tap
+      # Whether to update homebrew with this release as well
+      UPDATE_HOMEBREW: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if the published tag is well formed and setup vars
         run: |
@@ -170,9 +172,10 @@ jobs:
 
       - name: Push docker image to repository
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.RELEASE_DOCKERHUB_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.RELEASE_DOCKERHUB_TOKEN }}
         run: |
+          set -ue
           docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_TOKEN}"
           docker push ${IMAGE_NAMESPACE}/argocd:v${TARGET_VERSION}
         if: ${{ env.DRY_RUN != 'true' }}
@@ -185,6 +188,7 @@ jobs:
 
       - name: Push changes to release branch
         run: |
+          set -ue
           git push origin ${TARGET_BRANCH}
           git push origin ${RELEASE_TAG}
 
@@ -239,18 +243,22 @@ jobs:
           repository: ${{ env.TAP_REPOSITORY }}
           path: homebrew-tap
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ env.UPDATE_HOMEBREW == 'true' }}
           
       - name: Update homebrew tap formulae
         run: |
+          set -ue
           cd homebrew-tap
           ./update.sh argocd ${TARGET_VERSION}
           git commit -am "Update argocd to ${TARGET_VERSION}"
           git push
           cd ..
           rm -rf homebrew-tap
+        if: ${{ env.UPDATE_HOMEBREW == 'true' }}
 
       - name: Delete original request tag from repository
         run: |
+          set -ue
           git push --delete origin ${SOURCE_TAG}
         if: ${{ always() }}
