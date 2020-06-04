@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+# This script requires bash shell - sorry.
 
 NEW_TAG="${1}"
 GIT_REMOTE="${2}"
@@ -39,6 +41,18 @@ if ! echo "${NEW_TAG}" | egrep -q '^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)*$'; then
 fi
 
 TRIGGER_TAG="release-${NEW_TAG}"
+
+# Check whether we are in correct branch of local repository
+RELEASE_BRANCH="${NEW_TAG%\.[0-9]*}"
+RELEASE_BRANCH="release-${RELEASE_BRANCH#*v}"
+
+currentBranch=$(git branch --show-current)
+if test "$currentBranch" != "${RELEASE_BRANCH}"; then
+	echo "!! Please checkout branch '${RELEASE_BRANCH}' (currently in branch: '${currentBranch}')" >&2
+	exit 1
+fi
+
+echo ">> Working in release branch '${RELEASE_BRANCH}'"
 
 # Check for trigger tag existing in local repo
 if git tag -l | grep -q "${TRIGGER_TAG}"; then
