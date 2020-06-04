@@ -19,7 +19,7 @@ jobs:
       # The name of the repository containing tap formulae
       TAP_REPOSITORY: jannfis/homebrew-tap
       # Whether to update homebrew with this release as well
-      UPDATE_HOMEBREW: true
+      UPDATE_HOMEBREW: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
