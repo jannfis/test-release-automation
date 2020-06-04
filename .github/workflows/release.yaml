@@ -29,7 +29,7 @@ jobs:
 
       - name: Check if the published tag is well formed and setup vars
         run: |
-          set -ue
+          set -xue
           # Target version must match major.minor.patch and optional -rcX suffix
           # where X must be a number.
           TARGET_VERSION=${SOURCE_TAG#*release-v}
