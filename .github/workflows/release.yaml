@@ -259,7 +259,7 @@ jobs:
       - name: Check out homebrew tap repository
         uses: actions/checkout@v2
         env:
-          HOMEBREW_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TOKEN: ${{ secrets.RELEASE_HOMEBREW_TOKEN }}
         with:
           repository: ${{ env.TAP_REPOSITORY }}
           path: homebrew-tap
