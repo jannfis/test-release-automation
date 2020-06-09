@@ -27,6 +27,10 @@ jobs:
       TAP_REPOSITORY: jannfis/homebrew-tap
       # Whether to update homebrew with this release as well
       UPDATE_HOMEBREW: false
+      # Name of the GitHub user for Git config
+      GIT_USERNAME: argo-bot
+      # E-Mail of the GitHub user for Git config
+      GIT_EMAIL: argoproj@gmail.com
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -140,8 +144,8 @@ jobs:
       - name: Setup Git author information
         run: |
           set -ue
-          git config --global user.email "jann@mistrust.net"
-          git config --global user.name "jannfis"
+          git config --global user.email "${GIT_EMAIL}"
+          git config --global user.name "${GIT_USERNAME}"
 
       - name: Checkout corresponding release branch
         run: |
@@ -258,8 +262,8 @@ jobs:
           repository: ${{ env.TAP_REPOSITORY }}
           path: homebrew-tap
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ env.UPDATE_HOMEBREW == 'true' }}
+          token: ${{ secrets.HOMEBREW_TOKEN }}
+        if: ${{ secrets.HOMEBREW_TOKEN != '' && env.UPDATE_HOMEBREW == 'true' && env.PRE_RELEASE != 'true' }}
           
       - name: Update homebrew tap formulae
         run: |
@@ -270,7 +274,7 @@ jobs:
           git push
           cd ..
           rm -rf homebrew-tap
-        if: ${{ env.UPDATE_HOMEBREW == 'true' }}
+        if: ${{ secrets.HOMEBREW_TOKEN != '' && env.UPDATE_HOMEBREW == 'true' && env.PRE_RELEASE != 'true' }}
 
       - name: Delete original request tag from repository
         run: |
