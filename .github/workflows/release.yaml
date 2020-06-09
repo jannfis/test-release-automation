@@ -26,7 +26,7 @@ jobs:
       # The name of the repository containing tap formulae
       TAP_REPOSITORY: jannfis/homebrew-tap
       # Whether to update homebrew with this release as well
-      UPDATE_HOMEBREW: false
+      UPDATE_HOMEBREW: true
       # Name of the GitHub user for Git config
       GIT_USERNAME: argo-bot
       # E-Mail of the GitHub user for Git config
