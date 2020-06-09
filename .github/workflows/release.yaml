@@ -264,7 +264,7 @@ jobs:
           repository: ${{ env.TAP_REPOSITORY }}
           path: homebrew-tap
           fetch-depth: 0
-          token: ${{ secrets.HOMEBREW_TOKEN }}
+          token: ${{ secrets.RELEASE_HOMEBREW_TOKEN }}
         if: ${{ env.HOMEBREW_TOKEN != '' && env.UPDATE_HOMEBREW == 'true' && env.PRE_RELEASE != 'true' }}
 
       - name: Update homebrew tap formulae
